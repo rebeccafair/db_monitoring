@@ -15,6 +15,9 @@ sudo cp logstash.repo /etc/yum.repos.d/
 # Install logstash
 sudo yum install -y logstash
 
+# Move logstash configuration files
+cp *.conf /etc/logstash/conf.d
+
 # Start logstash on boot
 sudo /bin/systemctl daemon-reload
 sudo /bin/systemctl enable logstash.service
