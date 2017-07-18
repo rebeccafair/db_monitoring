@@ -14,6 +14,7 @@ sudo cp elasticsearch.repo /etc/yum.repos.d/
 
 # Install elasticsearch
 sudo yum install -y elasticsearch
+sudo cp elasticsearch.yml /etc/elasticsearch
 
 # Start elasticsearch on boot
 sudo /bin/systemctl daemon-reload
