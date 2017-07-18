@@ -1,6 +1,7 @@
 import random
 import time
 import os
+import subprocess
 import MySQLdb
 
 first_names = [line.strip() for line in open('db_entries/first_names.txt')]
@@ -154,13 +155,19 @@ def getRandomQuery():
             query += " where " + table_names[table] + "." + col_name + " " + operation + " '" + str(rand_functions[col_name]()) + "'"
 
     query += ";" 
+    print query
     return query
 
-db = MySQLdb.connect(read_default_file='~/.my.cnf')
-cur = db.cursor()
-cur.execute(getRandomQuery())
-for row in cur.fetchall():
-    print row[0]
-print "Auto Increment ID: %s" % cur.lastrowid
-db.commit()
-db.close()
+
+# To send many queries asynchronously
+#FNULL = open(os.devnull, 'w')
+#while True:
+#    subprocess.Popen(["mysql", "-uroot","-pPassword!1","-e" + getRandomQuery() + ";"], stdout=FNULL)
+#    time.sleep(0.5)
+
+# To send one query after another synchronously
+#db = MySQLdb.connect(user="root",passwd="Password!1")
+#cur = db.cursor()
+#while True:
+#    cur.execute(getRandomQuery())
+#db.close()
