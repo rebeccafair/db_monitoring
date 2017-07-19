@@ -160,10 +160,11 @@ def getRandomQuery():
 
 
 # To send many queries asynchronously
-#FNULL = open(os.devnull, 'w')
-#while True:
-#    subprocess.Popen(["mysql", "-uroot","-pPassword!1","-e" + getRandomQuery() + ";"], stdout=FNULL)
-#    time.sleep(0.5)
+FNULL = open(os.devnull, 'w')
+users = ["root","reader1","reader2","reader3"]
+while True:
+    subprocess.Popen(["mysql", "-u" + random.choice(users),"-pPassword!1","-e" + getRandomQuery() + ";"], stdout=FNULL)
+    time.sleep(60*random.random())
 
 # To send one query after another synchronously
 #db = MySQLdb.connect(user="root",passwd="Password!1")
