@@ -9,7 +9,7 @@ rm filebeat-5.5.0-x86_64.rpm
 sudo cp filebeat.yml /etc/filebeat
 
 # Add filebeat template to elasticsearch
-curl --user elastic:changeme -H 'Content-Type: application/json' -XPUT 'http://vm307.nubes.stfc.ac.uk/_template/filebeat' -d@/etc/filebeat/filebeat.template.json
+curl --user elastic:changeme -H 'Content-Type: application/json' -XPUT 'http://vm307.nubes.stfc.ac.uk:9200/_template/filebeat' -d@/etc/filebeat/filebeat.template.json
 
 # Start filebeat
 sudo /etc/init.d/filebeat start
