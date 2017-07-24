@@ -1,0 +1,1 @@
+curl --user elastic:changeme -XPOST 'http://vm307.nubes.stfc.ac.uk:9200/_xpack/watcher/watch/user_cpu/_execute'

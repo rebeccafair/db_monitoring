@@ -1,0 +1,85 @@
+curl --user elastic:changeme -XPUT 'http://vm307.nubes.stfc.ac.uk:9200/_xpack/watcher/watch/user_cpu' -H 'Content-Type: application/json' -d'{
+  "metadata": {
+    "threshold": 0.7,
+    "window_period": "5m"
+  },
+  "trigger": {
+    "schedule": {
+      "interval": "5m"
+    }
+  },
+  "input": {
+    "search": {
+      "request": {
+        "indices": [
+          "metricbeat-*"
+        ],
+        "body": {
+          "aggs": {
+            "host": {
+              "terms": {
+                "field": "beat.hostname"
+              },
+              "aggs": {
+                "user_cpu": {
+                  "avg": {
+                    "field": "system.cpu.user.pct"
+                  }
+                }
+              }
+            }
+          },
+          "query": {
+            "bool": {
+              "filter": [
+                {
+                  "range": {
+                    "@timestamp": {
+                      "gte": "now-{{ctx.metadata.window_period}}"
+                    }
+                  }
+                },
+                {
+                  "range": {
+                    "system.cpu.user.pct": {
+                      "gte": "{{ctx.metadata.threshold}}"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "compare": {
+      "ctx.payload.hits.total": {
+        "gt": 0
+      }
+    }
+  },
+  "actions": {
+    "send_email": {
+      "transform": {
+        "script": "def threshold_p = ctx.metadata.threshold*100; return [ \u0027threshold\u0027: (int)threshold_p, \u0027hosts\u0027: ctx.payload.aggregations.host.buckets.stream().map(p -> [ \u0027key\u0027: p.key, \u0027user_cpu\u0027: (int) (p.user_cpu.value*100)]).collect(Collectors.toList()) ];"
+      },
+      "throttle_period": "30m",
+      "email": {
+        "from": "db.alert.test@gmail.com",
+        "to": "rebecca.fair@stfc.ac.uk",
+        "attachments": {
+          "payload.data": {
+            "data": {
+            }
+          }
+        },
+        "subject": "Elastic Watcher - High Average User CPU:{{#ctx.payload.hosts}} {{key}}{{/ctx.payload.hosts}}",
+        "body": {
+          "html": "<html><p style=\u0022font-family:Calibri\u0022>In the past {{ctx.metadata.window_period}} the following hosts have had an average user CPU utilisation over {{ctx.payload.threshold}}%:</p><p style=\u0022font-family:Calibri\u0022>{{#ctx.payload.hosts}}- Host: {{key}} Average User CPU: {{user_cpu}}% <a href=\u0022http://vm307.nubes.stfc.ac.uk:5601/app/kibana#/dashboard/Metricbeat-cpu?_g=(refreshInterval:(display:Off,pause:!f,value:0),time:(from:now-24h,mode:quick,to:now))&_a=(description:\u0027\u0027,filters:!(),options:(darkTheme:!f),panels:!((col:1,id:System-Navigation,panelIndex:2,row:1,size_x:2,size_y:3,type:visualization),(col:1,id:CPU-usage-over-time,panelIndex:4,row:4,size_x:6,size_y:5,type:visualization),(col:9,id:System-load,panelIndex:6,row:1,size_x:4,size_y:3,type:visualization),(col:7,id:System-Load-over-time,panelIndex:8,row:4,size_x:6,size_y:5,type:visualization),(col:1,id:Top-hosts-by-CPU-usage,panelIndex:9,row:9,size_x:12,size_y:5,type:visualization),(col:3,id:CPU-Usage,panelIndex:10,row:1,size_x:6,size_y:3,type:visualization)),query:(query_string:(analyze_wildcard:!t,query:\u0027beat.hostname:{{key}}\u0027)),timeRestore:!f,title:Metricbeat-cpu,uiState:(P-9:(vis:(params:(sort:(columnIndex:!n,direction:!n))))),viewMode:view)\u0022>View</a><br>{{/ctx.payload.hosts}}<p></html>"
+        }
+      }
+    }
+  }
+}'
