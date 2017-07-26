@@ -28,15 +28,32 @@ sudo systemctl enable httpd.service
 sudo service snmpd start
 sudo systemctl enable snmpd.service
 
-# Install cacti
+# Install Cacti
 sudo yum -y install cacti
+
+# Create Cacti DB and user, and populate DB
 mysql -u root -p$MYSQL_PASSWORD -e "create database cacti;"
 mysql -u root -p$MYSQL_PASSWORD -e "grant all on cacti.* to 'cacti'@'localhost' identified by 'Password!1';"
 mysql -u cacti -p$MYSQL_PASSWORD cacti < /usr/share/doc/cacti-1.1.10/cacti.sql
 mysql -u root -p$MYSQL_PASSWORD -e "grant select on mysql.time_zone_name to 'cacti'@'localhost';"
 mysql_tzinfo_to_sql /usr/share/zoneinfo/ | mysql -u root -p$MYSQL_PASSWORD mysql
+
+# Copy Cacti config files
 sudo cp -p db.php /etc/cacti/
 sudo cp cacti.conf /etc/httpd/conf.d/
+
+# Create Cacti user, correct permissions and create poller crontab
 sudo useradd cacti -d '/usr/share/cacti' -s '/bin/false'
 sudo chown -R cacti:cacti /usr/share/cacti/rra /usr/share/cacti/log /var/log/cacti /var/lib/cacti/rra
 (sudo crontab -u cacti -l ; echo "*/5 * * * * /usr/bin/php /usr/share/cacti/poller.php > /dev/null 2>&1") | sudo crontab -u cacti -
+
+# Download percona monitoring plugins for Cacti
+sudo yum install -y percona-cacti-templates
+# Copy config file
+sudo cp ss_get_mysql_stats.php.cnf /etc/cacti/
+# Scripts now in /usr/share/cacti/scripts and templates in /usr/share/cacti/resource/percona
+# Need to import templates manually from Cacti interface see https://www.percona.com/files/PerconaMonitoringPlugins.pdf
+
+# NOTE:      Cacti v 1.1.10 has a bug where developer logs cause an out of memory error. See fix at https://github.com/Cacti/cacti/issues/829
+# ALSO NOTE: Cacti 1.1.10 combined with Percona Monitoring Plugins 1.1.7 has a bug causing MySQL user/password in config file to be 
+#            overwritten by empty strings. See fix at https://github.com/percona/percona-monitoring-plugins/issues/40 
