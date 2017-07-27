@@ -57,3 +57,7 @@ sudo cp ss_get_mysql_stats.php.cnf /etc/cacti/
 # NOTE:      Cacti v 1.1.10 has a bug where developer logs cause an out of memory error. See fix at https://github.com/Cacti/cacti/issues/829
 # ALSO NOTE: Cacti 1.1.10 combined with Percona Monitoring Plugins 1.1.7 has a bug causing MySQL user/password in config file to be 
 #            overwritten by empty strings. See fix at https://github.com/percona/percona-monitoring-plugins/issues/40 
+
+# Install Cacti thold plugin for alerting
+sudo git clone https://github.com/Cacti/plugin_thold.git /usr/share/cacti/plugins/thold
+# Then go to Configuration > Plugin Management then install and enable the plugin
