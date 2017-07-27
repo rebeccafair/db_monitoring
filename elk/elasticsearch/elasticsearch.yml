@@ -87,15 +87,3 @@ network.host: vm307.nubes.stfc.ac.uk
 # Require explicit names when deleting indices:
 #
 #action.destructive_requires_name: true
-xpack.watcher.enabled: true
-xpack.watcher.actions.email.html.sanitization.allow: _links
-xpack.notification.email.account:
-    gmail_account:
-        profile: gmail
-        smtp:
-            auth: true
-            starttls.enable: true
-            host: 'smtp.gmail.com'
-            port: 587
-            user: 'db.alert.test@gmail.com'
-            password: 'Password!1'

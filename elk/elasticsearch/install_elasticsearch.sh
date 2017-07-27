@@ -23,10 +23,3 @@ sudo systemctl start elasticsearch.service
 
 # Test elasticsearch
 sudo systemctl status elasticsearch
-
-# Install x-pack for elasticsearch
-ES_HOME=/usr/share/elasticsearch
-(cd $ES_HOME && exec sudo bin/elasticsearch-plugin install --batch x-pack)
-sudo systemctl restart elasticsearch
-sudo systemctl status elasticsearch
-

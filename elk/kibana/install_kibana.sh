@@ -18,9 +18,3 @@ sudo systemctl start kibana.service
 # Test kibana
 sudo systemctl status kibana
 
-# Install x-pack for kibana
-KIBANA_HOME=/usr/share/kibana
-(cd $KIBANA_HOME && exec sudo bin/kibana-plugin install x-pack)
-sudo systemctl restart kibana
-sudo systemctl status kibana
-
