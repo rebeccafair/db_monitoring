@@ -1,0 +1,15 @@
+[diskstats]
+user munin
+
+[iostat_ios]
+user munin
+
+[cpu*]
+env.scaleto100 yes
+env.user_warning 10
+env.user_critical 20
+
+[mysql*]
+env.ib_io_read_warning 10
+env.ib_io_read_critical 20
+

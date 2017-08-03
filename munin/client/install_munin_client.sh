@@ -15,7 +15,6 @@ sudo yum install -y munin-node
 sudo cp munin-node.conf /etc/munin/
 sudo munin-node-configure --shell --families=contrib,auto | sh -x
 sudo systemctl enable munin-node
-sudo systemctl start munin-node
 
 # Note: also need to add the new Munin node to the config on the master /etc/munin/munin.conf
 
@@ -31,7 +30,7 @@ rm -f master.zip
 
 # Install dependencies
 sudo yum group install -y "Development Tools"
-sudo yum -y install cpan
+sudo yum -y install cpan perl-Cache-Cache
 yes "" | sudo cpan
 sudo cpan DBI DBD::mysql Module::Pluggable
 
@@ -40,5 +39,10 @@ cp Makefile munin-mysql-master
 cp mysql.cnf munin-mysql-master
 cd munin-mysql-master && sudo make install
 
+# Copy munin-node plugin configs
+sudo cp munin-node /etc/munin/plugin-conf.d/
 
+sudo systemctl start munin-node
 
+# To install plugins create symlink from /usr/share/munin/plugins to /etc/munin/plugins
+# e.g. ln -s /usr/share/munin/plugins/mysql_ /etc/munin/plugins/mysql_
