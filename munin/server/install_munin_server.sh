@@ -29,3 +29,10 @@ sudo systemctl start munin-node
 
 #sudo munin-node-configure --snmp vm265.nubes.stfc.ac.uk
 
+# Set up mail (from https://aacable.wordpress.com/2015/08/07/centos-sending-email-using-sendmail-relay-via-gmail/)
+sudo yum -y install sendmail mailutils mailx sendmail-bin sendmail-cf cyrus-sasl-plain
+sudo cp -r authinfo /etc/mail
+sudo cp sendmail.mc /etc/mail
+sudo make -C /etc/mail
+sudo systemctl restart sendmail
+
