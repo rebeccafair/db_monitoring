@@ -16,7 +16,7 @@ sudo yum install -y httpd httpd-devel
 sudo yum insyall -y php
 sudo cp php.ini /etc
 sudo yum install -y php-mysql php-pear php-common php-gd php-devel php-mbstring php-cli php-snmp
- If there are issues with httpd do 'sudo cp /usr/lib64/php/modules/* /etc/php.d'
+# If there are issues with httpd do 'sudo cp /usr/lib64/php/modules/* /etc/php.d'
 sudo cp httpd.conf /etc/httpd/conf
 sudo cp php.conf /etc/httpd/conf.d
 sudo yum install -y net-snmp-utils net-snmp-libs
