@@ -6,10 +6,10 @@ user munin
 
 [cpu*]
 env.scaleto100 yes
-env.user_warning 10
-env.user_critical 20
+env.user_warning 60
+env.user_critical 80
 
 [mysql*]
-env.ib_io_read_warning 10
-env.ib_io_read_critical 20
+env.ib_io_read_warning 70
+env.ib_io_read_critical 80
 
