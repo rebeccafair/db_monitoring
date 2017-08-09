@@ -48,7 +48,10 @@ metricbeat.modules:
 
 - module: mysql
   metricsets: ["status"]
-  hosts: ["root:Password!1@tcp(localhost:3306)/"]
+  #hosts: ["root:Password!1@tcp(localhost:3306)/"]
+  hosts: ["tcp(localhost:3306)/"]
+  username: metricbeat
+  password: Password!1
   enabled: true
   period: 30s
 

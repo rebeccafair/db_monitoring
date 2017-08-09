@@ -11,5 +11,9 @@ sudo cp metricbeat.yml /etc/metricbeat
 # Add metricbeat template to elasticsearch
 curl --user elastic:changeme -H 'Content-Type: application/json' -XPUT 'http://vm307.nubes.stfc.ac.uk:9200/_template/metricbeat' -d@/etc/metricbeat/metricbeat.template.json
 
+# Add mysql user for metricbeat data collection
+MYSQL_PASSWORD="Password!1"
+mysql -u root -p$MYSQL_PASSWORD -e "grant process on *.* to 'metricbeat'@'localhost' identified by 'Password!1';"
+
 # Start metricbeat
 sudo /etc/init.d/metricbeat start
