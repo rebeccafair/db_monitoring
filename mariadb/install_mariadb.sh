@@ -20,6 +20,10 @@ sudo systemctl start mariadb
 #mysql -u root -p$MYSQL_PASSWORD -e 'set global long_query_time=0.5;'
 #mysql -u root -p$MYSQL_PASSWORD -e 'set session long_query_time=0.5;'
 #mysql -u root -p$MYSQL_PASSWORD -e 'set global innodb_monitor_enable=all;'
+#mysql -u root -p$MYSQL_PASSWORD -e 'set global userstat="ON";'
+#mysql -u root -p$MYSQL_PASSWORD -e 'install soname "query_response_time";'
+#mysql -u root -p$MYSQL_PASSWORD -e 'set global query_response_time_stats="ON";'
+
 
 #mysql -u root -p$MYSQL_PASSWORD -e "create user if not exists 'reader1' identified by 'Password!1';"
 #mysql -u root -p$MYSQL_PASSWORD -e "grant select on employees.* to reader1;"
@@ -27,3 +31,6 @@ sudo systemctl start mariadb
 #mysql -u root -p$MYSQL_PASSWORD -e "grant select on employees.* to reader2;"
 #mysql -u root -p$MYSQL_PASSWORD -e "create user if not exists 'reader3' identified by 'Password!1';"
 #mysql -u root -p$MYSQL_PASSWORD -e "grant select on employees.* to reader3;"
+
+# Install Python module for random query script
+#sudo yum install -y MySQL-python
