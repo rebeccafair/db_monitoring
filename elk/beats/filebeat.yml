@@ -20,7 +20,7 @@ filebeat.prospectors:
   # Paths that should be crawled and fetched. Glob based paths.
   paths:
     #- /var/log/*.log
-    - /var/lib/mysql/vm257-slow.log
+    - /var/lib/mysql/*-slow.log
     - /var/log/mysqld.log
     #- c:\programdata\elasticsearch\logs\*
 
