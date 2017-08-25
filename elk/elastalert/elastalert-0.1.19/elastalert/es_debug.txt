@@ -1,0 +1,59 @@
+curl -XGET 'http://localhost:9200/?pretty' -d ''
+curl -XGET 'http://localhost:9200/?pretty' -d ''
+curl -XGET 'http://localhost:9200/?pretty' -d ''
+curl -H 'Content-Type: application/json' -XGET 'http://localhost:9200/elastalert_status/elastalert/_search?pretty&size=1000' -d '{
+  "query": {
+    "bool": {
+      "filter": {
+        "range": {
+          "alert_time": {
+            "from": "2017-08-16T07:59:23.162090Z",
+            "to": "2017-08-18T07:59:23.162117Z"
+          }
+        }
+      },
+      "must": {
+        "query_string": {
+          "query": "!_exists_:aggregate_id AND alert_sent:false"
+        }
+      }
+    }
+  },
+  "sort": {
+    "alert_time": {
+      "order": "asc"
+    }
+  }
+}'
+curl -H 'Content-Type: application/json' -XGET 'http://localhost:9200/elastalert_status/elastalert_status/_search?pretty&_source_include=endtime%2Crule_name&size=1' -d '{
+  "query": {
+    "bool": {
+      "filter": {
+        "term": {
+          "rule_name": "Metricbeat CPU Spike Rule"
+        }
+      }
+    }
+  },
+  "sort": {
+    "@timestamp": {
+      "order": "desc"
+    }
+  }
+}'
+curl -H 'Content-Type: application/json' -XGET 'http://localhost:9200/elastalert_status/elastalert_status/_search?pretty&_source_include=endtime%2Crule_name&size=1' -d '{
+  "query": {
+    "bool": {
+      "filter": {
+        "term": {
+          "rule_name": "Metricbeat Load Spike Rule"
+        }
+      }
+    }
+  },
+  "sort": {
+    "@timestamp": {
+      "order": "desc"
+    }
+  }
+}'

@@ -1,0 +1,19 @@
+curl -XPUT 'vm307.nubes.stfc.ac.uk:9200/_all/_settings?pretty' -H 'Content-Type: application/json' -d'
+{
+    "index" : {
+        "search" : {
+            "slowlog" : {
+                "threshold" : {
+                    "query": {
+                        "info": "1ms"
+                    },
+                    "fetch": {
+                        "info": "1ms"
+                    }
+                }
+            }
+        }
+    }
+}
+'
+

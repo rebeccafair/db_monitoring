@@ -1,0 +1,33 @@
+name: Metricbeat Load Spike Rule
+#type: metric_aggregation
+type: spike
+
+index: metricbeat-%Y.%m.%d
+threshold: 1
+timeframe:
+    minutes: 1
+spike_height: 2
+spike_type: "up"
+use_strftime_index: true
+#
+filter:
+- term:
+    metricset.name: load
+- range:
+    load.1:
+        from: 0.03
+        to: 1.0
+
+#
+#            # (Required)
+#            # The alert is use when a match is found
+alert:
+- "debug"
+email:
+- "rebecca.fair@stfc.ac.uk"
+smtp_host: smtp.gmail.com
+smtp_port: 587
+from_addr: "db.alert.test@gmail.com"
+user: "db.alert.test@gmail.com"
+password: "Password!1"
+#

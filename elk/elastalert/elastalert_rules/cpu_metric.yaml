@@ -1,0 +1,44 @@
+name: Metricbeat CPU Spike Rule
+type: metric_aggregation
+
+index: metricbeat-%Y.%m.%d
+use_strftime_index: true
+#
+#buffer_time:
+#  hours: 1
+#  minutes: 15
+#
+max_query_size: 100
+metric_agg_key: system.cpu.user.pct
+metric_agg_type: avg
+query_key: beat.hostname
+terms_size: 100
+doc_type: metricsets
+#    
+#bucket_interval:
+#  minutes: 5
+#        
+#sync_bucket_interval: true
+allow_buffer_time_overlap: true
+#        #use_run_every_query_size: true
+#
+#min_threshold: 0.1
+max_threshold: 0.1
+
+#
+filter:
+- term:
+    metricset.name: cpu
+#
+#            # (Required)
+#            # The alert is use when a match is found
+alert:
+- "debug"
+email:
+- "rebecca.fair@stfc.ac.uk"
+smtp_host: smtp.gmail.com
+smtp_port: 587
+from_addr: "db.alert.test@gmail.com"
+user: "db.alert.test@gmail.com"
+password: "Password!1"
+#
