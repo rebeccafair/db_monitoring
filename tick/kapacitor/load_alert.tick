@@ -12,7 +12,7 @@ var name = 'High Load'
 
 var idVar = name + ':{{.Group}}'
 
-var message = ' {{.Level}}:  {{.Name}} high on {{ index .Tags "host" }}'
+var message = ' {{.Level}}:  High load on {{ index .Tags "host" }}'
 
 var idTag = 'alertID'
 
@@ -30,7 +30,7 @@ var outputMeasurement = 'alerts'
 
 var triggerType = 'threshold'
 
-var details = '{{.Level}}: {{.Name}} reached {{ index .Fields "value" }} at {{.Time}} for {{.Group}}\n{{ .Tags }} {{ .Fields }}'
+var details = 'KAPACITOR ALERT<br><br> {{.Level}}: Load reached {{ index .Fields "value" }} on {{ index .Tags "host"}} at {{.Time}} <a href="http://vm188.nubes.stfc.ac.uk:8888/sources/1/dashboards/1">View</a>'
 
 var crit = 0.35
 
